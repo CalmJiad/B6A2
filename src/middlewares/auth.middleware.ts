@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import config from "../../config";
+import config from "../config";
 
 const signupValidator = (req: Request, res: Response, next: NextFunction) => {
   const { name, email, password, phone, role } = req.body;
@@ -46,12 +46,12 @@ const signupValidator = (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
-const tokenValidator = (...roles: string[]) => {
+const tokenAuthorizer = (...roles: string[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       let token = req.headers.authorization;
       if (!token)
-        return res.status(500).json({
+        return res.status(401).json({
           success: false,
           message: "You are not allowed",
         });
@@ -82,5 +82,5 @@ const tokenValidator = (...roles: string[]) => {
 
 export const authMiddlewares = {
   signupValidator,
-  tokenValidator,
+  tokenAuthorizer,
 };
