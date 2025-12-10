@@ -1,4 +1,6 @@
 import { NextFunction, Request, Response } from "express";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import config from "../../config";
 
 const signupValidator = (req: Request, res: Response, next: NextFunction) => {
   const { name, email, password, phone, role } = req.body;
@@ -44,6 +46,41 @@ const signupValidator = (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
+const tokenValidator = (...roles: string[]) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      let token = req.headers.authorization;
+      if (!token)
+        return res.status(500).json({
+          success: false,
+          message: "You are not allowed",
+        });
+      const TokenArr = token?.split(" ");
+      token = TokenArr?.[1];
+      const decodeJWTToken = jwt.verify(
+        token,
+        config.jwt_secret as string
+      ) as JwtPayload;
+      console.log(decodeJWTToken);
+      req.user = decodeJWTToken;
+
+      if (roles && !roles.includes(decodeJWTToken.role))
+        return res.status(401).json({
+          success: false,
+          message: "You are unauthorized",
+        });
+
+      next();
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  };
+};
+
 export const authMiddlewares = {
   signupValidator,
+  tokenValidator,
 };
