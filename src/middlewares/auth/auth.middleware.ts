@@ -1,0 +1,49 @@
+import { NextFunction, Request, Response } from "express";
+
+const signupValidator = (req: Request, res: Response, next: NextFunction) => {
+  const { name, email, password, phone, role } = req.body;
+  if (!name || !email || !password || !phone) {
+    return res.status(400).json({
+      success: false,
+      message: "All fields are required: name, email, password, phone",
+    });
+  }
+
+  // email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email.toLowerCase())) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid email format",
+    });
+  }
+
+  // password length
+  if (typeof password !== "string" || password.length < 6) {
+    return res.status(400).json({
+      success: false,
+      message: "Password must be 'String' & at least 6 characters long",
+    });
+  }
+  // phone number
+  if (phone.length < 6) {
+    return res.status(400).json({
+      success: false,
+      message: "Phone number is too short",
+    });
+  }
+
+  const validRoles = ["admin", "customer"];
+  if (role && !validRoles.includes(role)) {
+    return res.status(400).json({
+      success: false,
+      message: "Role must be either 'admin' or 'customer'",
+    });
+  }
+
+  next();
+};
+
+export const authMiddlewares = {
+  signupValidator,
+};
