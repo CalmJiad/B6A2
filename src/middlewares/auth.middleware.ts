@@ -53,7 +53,7 @@ const tokenAuthorizer = (...roles: string[]) => {
       if (!token)
         return res.status(401).json({
           success: false,
-          message: "You are not allowed",
+          message: "Invalid authorization token",
         });
       const TokenArr = token?.split(" ");
       token = TokenArr?.[1];
