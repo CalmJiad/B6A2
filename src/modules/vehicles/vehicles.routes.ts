@@ -12,4 +12,12 @@ router.post(
   vehicleControllers.createVehicle
 );
 
+router.get("/vehicles", vehicleControllers.getAllVehicle);
+router.get("/vehicles/:vehicleId", vehicleControllers.getVehicleById);
+router.put(
+  "/vehicles/:vehicleId",
+  authMiddlewares.tokenAuthorizer("admin"),
+  vehicleControllers.updateVehicleById
+);
+
 export const vehicleRoutes = router;
