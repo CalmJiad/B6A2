@@ -16,7 +16,7 @@ const createVehicle = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     res.status(500).json({
-      success: true,
+      success: false,
       error: error.message,
     });
   }
@@ -42,7 +42,7 @@ const getAllVehicle = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     res.status(500).json({
-      success: true,
+      success: false,
       error: error.message,
     });
   }
@@ -68,7 +68,7 @@ const getVehicleById = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     res.status(500).json({
-      success: true,
+      success: false,
       error: error.message,
     });
   }
@@ -102,15 +102,15 @@ const updateVehicleById = async (req: Request, res: Response) => {
     console.log(result);
 
     if (!result)
-      return res.send(500).json({
+      return res.status(500).json({
         success: false,
         message: "Error updating vehicle",
       });
 
     if (result.rows.length === 0)
-      return res.status(500).json({
+      return res.status(404).json({
         success: false,
-        message: "No similar vehicle data found",
+        message: "No vehicle found with the given ID",
       });
 
     return res.status(201).json({
@@ -120,7 +120,7 @@ const updateVehicleById = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     res.status(500).json({
-      success: true,
+      success: false,
       error: error.message,
     });
   }

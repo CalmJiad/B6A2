@@ -46,6 +46,36 @@ const signupValidator = (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
+const loginValidator = (req: Request, res: Response, next: NextFunction) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({
+      success: false,
+      message: "Email and password are required",
+    });
+  }
+
+  // email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email.toLowerCase())) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid email format",
+    });
+  }
+
+  // password validation
+  if (typeof password !== "string" || password.length < 6) {
+    return res.status(400).json({
+      success: false,
+      message: "Password must be a string and at least 6 characters long",
+    });
+  }
+
+  next();
+};
+
 const tokenAuthorizer = (...roles: string[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -82,5 +112,6 @@ const tokenAuthorizer = (...roles: string[]) => {
 
 export const authMiddlewares = {
   signupValidator,
+  loginValidator,
   tokenAuthorizer,
 };

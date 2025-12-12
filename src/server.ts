@@ -32,6 +32,15 @@ app.use((req: Request, res: Response) => {
   });
 });
 
+// global error handler
+app.use((error: any, req: Request, res: Response, next: any) => {
+  console.error("Error:", error);
+  res.status(error.status || 500).json({
+    success: false,
+    message: error.message || "Internal Server Error",
+  });
+});
+
 app.listen(config.port, () => {
   console.log(`Server Is Running On Port ${config.port}`);
 });
