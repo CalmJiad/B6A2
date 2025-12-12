@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import config from "./config";
 import { dbConfig } from "./config/dbconfig";
 import { authRoutes } from "./modules/auth/auth.routes";
+import { userRoutes } from "./modules/user/user.routes";
 import { vehicleRoutes } from "./modules/vehicles/vehicles.routes";
 
 const app = express();
@@ -22,6 +23,7 @@ app.get("/", (req: Request, res: Response) => {
 // modular routes
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1", vehicleRoutes);
+app.use("/api/v1", userRoutes);
 
 // not found route
 app.use((req: Request, res: Response) => {
