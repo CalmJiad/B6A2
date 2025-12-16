@@ -94,8 +94,8 @@ const tokenAuthorizer = (...roles: string[]) => {
       console.log(decodeJWTToken);
       req.user = decodeJWTToken;
 
-      if (roles && !roles.includes(decodeJWTToken.role))
-        return res.status(401).json({
+      if (roles && !roles.includes(decodeJWTToken.role as string))
+        return res.status(403).json({
           success: false,
           message: "You are unauthorized",
         });

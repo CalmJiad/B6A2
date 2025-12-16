@@ -10,4 +10,10 @@ router.get(
   userControllers.getAllUsers
 );
 
+router.put(
+  "/users/:userId",
+  authMiddlewares.tokenAuthorizer("admin", "customer"),
+  userControllers.updateUsers
+);
+
 export const userRoutes = router;

@@ -59,7 +59,12 @@ const loginUser = async (email: string, password: string) => {
   // using linux: {openssl rand -hex 64}
 
   const token = jwt.sign(
-    { name: userInfos.name, email: userInfos.email, role: userInfos.role },
+    {
+      id: userInfos.id,
+      name: userInfos.name,
+      email: userInfos.email,
+      role: userInfos.role,
+    },
     `${config.jwt_secret}`,
     { expiresIn: "1d" }
   );

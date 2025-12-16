@@ -27,6 +27,82 @@ const getAllUsers = async (req: Request, res: Response) => {
   }
 };
 
+const updateUsers = async (req: Request, res: Response) => {
+  if (!req.body || Object.keys(req.body).length === 0) {
+    return res.status(400).json({
+      success: false,
+      message:
+        "Request body is missing or empty. Send JSON with Content-Type: application/json",
+    });
+  }
+
+  const { name, email, phone, role } = req.body;
+
+  const updates: {
+    name?: string;
+    email?: string;
+    phone?: string;
+    role?: string;
+  } = {};
+  if (name !== undefined) updates.name = name;
+  if (email !== undefined) updates.email = email;
+  if (phone !== undefined) updates.phone = phone;
+
+  // Only admin is allowed to update role
+  if (req.user?.role === "admin" && role !== undefined) {
+    updates.role = role;
+  }
+
+  try {
+    let result = null;
+
+    if (
+      req.user?.role === "customer" &&
+      Number(req.params.userId) === Number(req.user?.id)
+    ) {
+      // Check if 'customer' has requested a role update
+      if (role !== undefined) {
+        return res.status(403).json({
+          success: false,
+          message: "You are not authorized to update the 'role'",
+        });
+      }
+      result = await userServices.updateUserByCustomer(
+        req.params.userId,
+        updates
+      );
+    } else if (req.user?.role === "admin") {
+      result = await userServices.updateUserByAdmin(req.params.userId, updates);
+    } else {
+      return res
+        .status(403)
+        .json({
+          success: false,
+          message: "Forbidden || You are not allowed to update",
+        });
+    }
+
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found or no valid fields to update",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "User data updated successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 export const userControllers = {
   getAllUsers,
+  updateUsers,
 };
