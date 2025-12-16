@@ -4,7 +4,7 @@ A robust and scalable backend API for managing vehicle rentals, built with **Nod
 
 ## 🔗 Live URL
 
-[API Base URL: `https://your-deployment-url.com`]
+[API Base URL: `https://vehicle-server-sigma.vercel.app/`]
 
 > Replace with your actual deployment URL (Vercel, Railway, Render, etc.)
 
