@@ -4,9 +4,9 @@ A robust and scalable backend API for managing vehicle rentals, built with **Nod
 
 ## 🔗 Live URL
 
-[API Base URL: `https://vehicle-server-sigma.vercel.app/`]
+**API Base URL:** `https://vehicle-server-sigma.vercel.app/`
 
-> Replace with your actual deployment URL (Vercel, Railway, Render, etc.)
+> The application is deployed on Vercel.
 
 ---
 
@@ -124,7 +124,25 @@ The application automatically creates the required tables on startup:
 npm run dev
 ```
 
+**Production Build:**
+
+```bash
+npm run build
+```
+
 The server will start on `http://localhost:5000` (or your specified PORT).
+
+### 6. Deployment
+
+This project is configured for deployment on **Vercel**.
+
+**Deploy to Vercel:**
+
+1. Install Vercel CLI: `npm i -g vercel`
+2. Run: `vercel --prod`
+3. Or push to GitHub and connect to Vercel dashboard
+
+The `vercel.json` configuration file handles the serverless deployment automatically.
 
 ---
 
@@ -177,7 +195,11 @@ Authorization: Bearer <your_jwt_token>
 
 ```
 B6A2/
+├── api/
+│   └── index.ts                  # Vercel serverless entry point
 ├── src/
+│   ├── app.ts                    # Express application setup
+│   ├── server.ts                 # Local development server
 │   ├── config/
 │   │   ├── index.ts              # Configuration management
 │   │   └── dbconfig.ts           # Database setup & initialization
@@ -201,14 +223,14 @@ B6A2/
 │   │       ├── vehicles.controller.ts
 │   │       ├── vehicles.routes.ts
 │   │       └── vehicles.service.ts
-│   ├── types/
-│   │   ├── auth.types.ts         # Authentication type definitions
-│   │   └── express.d.ts          # Express type extensions
-│   └── server.ts                 # Application entry point
-├── .env                          # Environment variables
+│   └── types/
+│       ├── auth.types.ts         # Authentication type definitions
+│       └── express.d.ts          # Express type extensions
+├── .env                          # Environment variables (local)
 ├── .gitignore
 ├── package.json
 ├── tsconfig.json
+├── vercel.json                   # Vercel deployment configuration
 └── README.md
 ```
 

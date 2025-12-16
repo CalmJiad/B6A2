@@ -18,7 +18,7 @@
     "url": "https://github.com/CalmJiad/B6A2/issues"
   },
   "homepage": "https://github.com/CalmJiad/B6A2#readme",
-  "description": "",
+  "description": "A robust backend API for managing vehicle rentals built with Node.js, TypeScript, and PostgreSQL",
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "dotenv": "^17.2.3",
