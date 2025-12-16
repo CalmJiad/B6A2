@@ -16,4 +16,10 @@ router.put(
   userControllers.updateUsers
 );
 
+router.delete(
+  "/users/:userId",
+  authMiddlewares.tokenAuthorizer("admin"),
+  userControllers.deleteUserById
+);
+
 export const userRoutes = router;

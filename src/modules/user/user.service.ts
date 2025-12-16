@@ -79,8 +79,33 @@ const updateUserByAdmin = async (
   return result.rows[0] || null;
 };
 
+const deleteUserById = async (userId: string) => {
+  // Check if user has any active bookings
+  const activeBookings = await dbConfig.pool.query(
+    `
+    SELECT * FROM Bookings 
+    WHERE customer_id = $1 AND status = 'active'
+    `,
+    [userId]
+  );
+
+  if (activeBookings.rows.length > 0) {
+    return { error: "Cannot delete user with active bookings" };
+  }
+
+  const result = await dbConfig.pool.query(
+    `
+    DELETE FROM Users WHERE id = $1 RETURNING *
+    `,
+    [userId]
+  );
+
+  return result.rows[0] || null;
+};
+
 export const userServices = {
   getAllUsers,
   updateUserByCustomer,
   updateUserByAdmin,
+  deleteUserById,
 };

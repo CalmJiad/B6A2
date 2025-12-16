@@ -19,5 +19,10 @@ router.put(
   authMiddlewares.tokenAuthorizer("admin"),
   vehicleControllers.updateVehicleById
 );
+router.delete(
+  "/vehicles/:vehicleId",
+  authMiddlewares.tokenAuthorizer("admin"),
+  vehicleControllers.deleteVehicleById
+);
 
 export const vehicleRoutes = router;

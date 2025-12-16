@@ -26,7 +26,7 @@ const createUser = async (payload: CreateUserPayload) => {
   const finalRole = role ?? "customer";
 
   const result = await dbConfig.pool.query(
-    `INSERT INTO Users(name, email, password, phone, role) VALUES($1, $2, $3, $4, $5) RETURNING * `,
+    `INSERT INTO Users(name, email, password, phone, role) VALUES($1, $2, $3, $4, $5) RETURNING id, name, email, phone, role `,
     [name, email, hashedPassword, phone, finalRole]
   );
   return result.rows[0];
@@ -68,7 +68,7 @@ const loginUser = async (email: string, password: string) => {
     `${config.jwt_secret}`,
     { expiresIn: "1d" }
   );
-  return { token, userInfos };
+  return { token, user: userInfos };
 };
 
 export const authServices = {

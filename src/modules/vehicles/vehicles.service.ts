@@ -83,9 +83,34 @@ const updateVehicleById = async (
   return result || null;
 };
 
+const deleteVehicleById = async (vehicleId: string) => {
+  // Check if vehicle has any active bookings
+  const activeBookings = await dbConfig.pool.query(
+    `
+    SELECT * FROM Bookings 
+    WHERE vehicle_id = $1 AND status = 'active'
+    `,
+    [vehicleId]
+  );
+
+  if (activeBookings.rows.length > 0) {
+    return { error: "Cannot delete vehicle with active bookings" };
+  }
+
+  const result = await dbConfig.pool.query(
+    `
+    DELETE FROM Vehicles WHERE id = $1 RETURNING *
+    `,
+    [vehicleId]
+  );
+
+  return result.rows[0] || null;
+};
+
 export const vehicleServices = {
   createVehicle,
   getAllVehicle,
   getVehicleById,
   updateVehicleById,
+  deleteVehicleById,
 };

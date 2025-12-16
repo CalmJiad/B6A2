@@ -10,13 +10,14 @@ const getAllUsers = async (req: Request, res: Response) => {
         message: "Error fetching user data",
       });
     if (result.length === 0)
-      return res.status(404).json({
-        success: false,
-        message: "No user data found",
+      return res.status(200).json({
+        success: true,
+        message: "Users retrieved successfully",
+        data: [],
       });
     return res.status(200).json({
       success: true,
-      message: "User data fetched successfully",
+      message: "Users retrieved successfully",
       data: result,
     });
   } catch (error: any) {
@@ -74,12 +75,10 @@ const updateUsers = async (req: Request, res: Response) => {
     } else if (req.user?.role === "admin") {
       result = await userServices.updateUserByAdmin(req.params.userId, updates);
     } else {
-      return res
-        .status(403)
-        .json({
-          success: false,
-          message: "Forbidden || You are not allowed to update",
-        });
+      return res.status(403).json({
+        success: false,
+        message: "Forbidden || You are not allowed to update",
+      });
     }
 
     if (!result) {
@@ -91,7 +90,7 @@ const updateUsers = async (req: Request, res: Response) => {
 
     return res.status(200).json({
       success: true,
-      message: "User data updated successfully",
+      message: "User updated successfully",
       data: result,
     });
   } catch (error: any) {
@@ -102,7 +101,40 @@ const updateUsers = async (req: Request, res: Response) => {
   }
 };
 
+const deleteUserById = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.userId;
+
+    const result = await userServices.deleteUserById(userId);
+
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    if ((result as any).error) {
+      return res.status(400).json({
+        success: false,
+        message: (result as any).error,
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "User deleted successfully",
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 export const userControllers = {
   getAllUsers,
   updateUsers,
+  deleteUserById,
 };

@@ -18,7 +18,7 @@ const createUser = async (req: Request, res: Response) => {
   } catch (error: any) {
     res.status(500).json({
       success: false,
-      error: error.message,
+      message: error.message,
     });
   }
 };
@@ -43,13 +43,13 @@ const loginUser = async (req: Request, res: Response) => {
 
     return res.status(200).json({
       success: true,
-      message: "User login successful",
+      message: "Login successful",
       data: result,
     });
   } catch (error: any) {
     res.status(500).json({
       success: false,
-      error: error.message,
+      message: error.message,
     });
   }
 };
