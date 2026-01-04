@@ -1,4 +1,4 @@
-# 🚗 Vehicle Rental Management System
+# Vehicle Rental Management System
 
 A robust and scalable backend API for managing vehicle rentals, built with **Node.js**, **TypeScript**, and **PostgreSQL**. This system provides comprehensive functionality for vehicle inventory management, customer bookings, and role-based access control.
 
